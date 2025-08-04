@@ -33,3 +33,67 @@ This project demonstrates a practical microservices architecture using **.NET 8*
 
 ## 🗂️ Solution Structure
 
+OrderPaymentSystem/
+│
+├── OrderService/
+│ ├── Controllers/
+│ ├── Events/
+│ ├── Data/
+│ ├── Models/
+│ ├── Services/
+│ └── appsettings.json
+│
+├── PaymentService/
+│ ├── Consumers/
+│ ├── Events/
+│ ├── Services/
+│ └── appsettings.json
+│
+└── README.md
+
+
+
+---
+
+## 🚀 Getting Started
+
+### ✅ Prerequisites
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+- [Docker](https://www.docker.com/products/docker-desktop)
+- Stripe account (for test secret key)
+
+---
+
+### 📥 Clone the Repository
+
+```bash
+git clone https://github.com/your-username/OrderPaymentSystem.git
+cd OrderPaymentSystem
+
+
+docker run -d --hostname rabbitmq-dev --name rabbitmq \
+  -p 5672:5672 -p 15672:15672 \
+  rabbitmq:3-management
+
+docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourStrong!Passw0rd" \
+  -p 1433:1433 --name sqlserver \
+  -d mcr.microsoft.com/mssql/server:2022-latest
+
+"ConnectionStrings": {
+  "DefaultConnection": "Server=localhost,1433;Database=OrdersDb;User Id=sa;Password=YourStrong!Passw0rd;"
+}
+
+"Stripe": {
+  "SecretKey": "sk_test_..."
+}
+
+cd OrderService
+dotnet ef database update
+
+cd OrderService
+dotnet run
+
+cd PaymentService
+dotnet run
+
